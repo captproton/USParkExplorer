@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   xmlns:s="library://ns.adobe.com/flex/spark">
+	<fx:Script>
+		<![CDATA[
+			private function add():void {
+				var newChild:String = "from Delhi";
+				dg1.dataProvider.addItem(newChild);
+				addDG.visible = false;
+				removeDG.visible = true;
+			}
+			private function remove():void {
+				dg1.dataProvider.removeItemAt(4);
+				addDG.visible = true;
+				removeDG.visible = false;
+			}
+		]]>
+	</fx:Script>
+	<s:Panel title="Data Group Container Example." width="300" height="200" borderColor="0x3081D2" horizontalCenter="2" backgroundColor="red">
+		<mx:VBox>
+			<s:DataGroup id="dg1" itemRenderer="spark.skins.spark.DefaultItemRenderer">
+				<s:layout>
+					<s:HorizontalLayout/>
+				</s:layout>
+				<mx:ArrayList>
+					<fx:String>Raj</fx:String>
+					<fx:String>Hari</fx:String>
+					<fx:String>Mohan</fx:String>
+					<fx:String>Anil</fx:String>
+				</mx:ArrayList>
+			</s:DataGroup>
+			<s:DataGroup id="dg2" itemRenderer="spark.skins.spark.DefaultComplexItemRenderer">
+				<s:layout>
+					<s:VerticalLayout/>
+				</s:layout>
+				<mx:ArrayList>
+					<s:Button id="addDG" label="Add" click="add()"/>
+					<s:Button id="removeDG" label="Remove" click="remove()" visible="false"/>
+				</mx:ArrayList>
+			</s:DataGroup>
+		</mx:VBox>
+	</s:Panel>
+</s:Application>

@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application 
+	xmlns:fx="http://ns.adobe.com/mxml/2009" 
+	xmlns:s="library://ns.adobe.com/flex/spark" 
+	xmlns:mx="library://ns.adobe.com/flex/mx" 
+	xmlns:d="http://ns.adobe.com/fxg/2008/dt" 
+	xmlns:fc="http://ns.adobe.com/flashcatalyst/2009"
+	 width="975" height="705" 
+	 backgroundColor="#ffffff"
+	 currentState="mainState">
+	<fx:Script>
+		<![CDATA[
+			import mx.utils.UIDUtil;
+			import mx.collections.ArrayCollection;
+			import mx.events.FlexEvent;
+			
+			[Bindable]
+			private var collection : ArrayCollection;
+			
+			protected function application1_creationCompleteHandler(event:FlexEvent):void
+			{
+				collection = new ArrayCollection();
+				collection.disableAutoUpdate();
+				for ( var x:int = 0; x < 1000; x++ )
+				{
+					collection.addItem( UIDUtil.createUID() );
+				}
+				collection.enableAutoUpdate();
+			}
+			
+
+			protected function closeDetail_clickHandler():void
+			{
+				currentState='homeGrid';
+			}
+
+			protected function toggleButton_clickHandler():void
+			{
+				const state:String = currentState;
+				if ( state == 'homeTile' ) {
+					currentState='homeGrid';
+				}
+				if ( state == 'homeGrid' ) {
+					currentState='homeTile';
+				}
+			}
+
+		]]>
+
+	</fx:Script>
+	
+
+	<s:states>
+		<s:State name="mainState"/>
+		<s:State name="homeGrid"/>
+		<s:State name="locDetail"/>
+		<s:State name="homeTile"/>
+	</s:states>
+	<fx:DesignLayer d:userLabel="MainLayout">
+		<s:DropDownList id="activitiesPulldown" x="654.65" y="14.2"></s:DropDownList>
+		<s:DropDownList id="stateOrTerritory"   x="366.65" y="14.2"></s:DropDownList>
+		<s:RichText x="29" y="678" color="#2b4381" fontFamily="Arial" fontSize="12" tabStops="S0 S50" text="Parks" textAlpha="1" d:userLabel="AppName" x.homeTile="29" y.homeTile="613"/>
+		<s:TextInput text="" x="28" y="14" d:userLabel="SearchInput" id="searchTerms"/>
+		<s:Button label="Search" x="175" y="16" skinClass="components.Button1" d:userLabel="SearchButton" buttonMode="true"/>
+		<s:Line yTo="1" y="51.5" xTo="915" x="7.5" d:userLabel="TopLine">
+			<s:stroke>
+				<s:SolidColorStroke color="0x5380D0" caps="none" joints="miter" miterLimit="4" weight="1"/>
+			</s:stroke>
+		</s:Line>
+		<s:Line yTo="3" y="663.5" xTo="902" x="9.5" d:userLabel="BottomLine" x.homeTile="9.5" y.homeTile="604.5">
+			<s:stroke>
+				<s:SolidColorStroke color="0x5380D0" caps="none" joints="miter" miterLimit="4" weight="1"/>
+			</s:stroke>
+		</s:Line>
+		<s:BitmapImage source="@Embed('/assets/images/4263920843_5e5ef906fa_b.jpg')" alpha="0.48" width="687" height="524" y="53" x="14" x.homeTile="93" y.homeTile="71"/>
+		<s:CheckBox label="Find Nearby" x="268.5" y="19.2" selected="true" buttonMode="true"/>
+		<s:TextInput text="City or ZIP" d:userLabel="SearchInput" x="505" y="14"/>
+		
+		<!--start from http://www.insideria.com/2009/08/using-virtualized-layouts-and.html-->
+		<s:Label text="list below" y="90" includeIn="mainState" />
+		<s:Scroller width="100%" height="75%" y="111" includeIn="mainState">
+			
+			<s:DataGroup dataProvider="{ collection }" id="dataGroup" width="100%" height="100%">
+				
+				<s:itemRenderer>
+					<fx:Component>
+						<s:ItemRenderer width="100%" height="25">
+							<s:states>
+								<s:State name="normal" />
+								<s:State name="hovered" />
+							</s:states>
+							
+							<s:Rect height="25" radiusX="10" width="100%" radiusY="10">
+								<s:fill>
+									<s:SolidColor color="#7fff7f" color.hovered="#FF6666"/>
+								</s:fill>
+								<s:stroke>
+									<s:SolidColorStroke color="0x4769C4" caps="none" joints="miter" miterLimit="4" weight="1"/>
+								</s:stroke>
+							</s:Rect>
+							<s:RichText top="5" text="{data}" horizontalCenter="0" />
+						</s:ItemRenderer>
+					</fx:Component>
+				</s:itemRenderer>
+				
+				<s:layout>
+					<s:VerticalLayout useVirtualLayout="true" />
+				</s:layout>
+				
+			</s:DataGroup>
+			
+		</s:Scroller>
+		
+		<!--finish from http://www.insideria.com/2009/08/using-virtualized-layouts-and.html-->		
+
+
+	</fx:DesignLayer>
+	<fx:DesignLayer d:userLabel="LocDetail" visible.homeTile="false" id="designlayer1" visible.homeGrid="false">
+		<s:List includeIn="locDetail" width="127.05" height="499.95" x="37" y="103" id="list1" d:userLabel="LocationList" textAlpha="0.66">
+			<s:ArrayCollection>
+				<fx:String>Apple</fx:String>
+				<fx:String>Orange</fx:String>
+				<fx:String>Banana</fx:String>
+				<fx:String>Blueberry</fx:String>
+				<fx:String>Pear</fx:String>
+			</s:ArrayCollection>
+		</s:List>
+
+		<s:Rect includeIn="locDetail" y="240.5" x="531.5" height="114" width="120" id="rect1" d:userLabel="LocationPic" alpha="0.74">
+			<s:stroke>
+				<s:SolidColorStroke color="0x5380D0" caps="none" joints="miter" miterLimit="4" weight="1"/>
+			</s:stroke>
+			<s:fill>
+				<s:SolidColor color="0xFFFFFF"/>
+			</s:fill>
+		</s:Rect>
+		<s:List width="127.05" height="499.95" x="297" y="103" id="list0" d:userLabel="PhotoList" includeIn="locDetail" textAlpha="0.74">
+			<s:ArrayCollection>
+				<fx:String>Apple</fx:String>
+				<fx:String>Orange</fx:String>
+				<fx:String>Banana</fx:String>
+				<fx:String>Blueberry</fx:String>
+				<fx:String>Pear</fx:String>
+			</s:ArrayCollection>
+		</s:List>
+		<s:List includeIn="locDetail" width="127" height="127" x="786.7" y="260.7" id="list2" d:userLabel="LocAccordion" textAlpha="0.74">
+			<s:ArrayCollection>
+				<fx:String>Apple</fx:String>
+				<fx:String>Orange</fx:String>
+				<fx:String>Banana</fx:String>
+				<fx:String>Blueberry</fx:String>
+				<fx:String>Pear</fx:String>
+			</s:ArrayCollection>
+		</s:List>
+		<s:Button includeIn="locDetail" label="X" x="877" y="82.05" id="button1" d:userLabel="CloseDetail" width="49" buttonMode="true" click="closeDetail_clickHandler()"/>
+		<s:RichText includeIn="locDetail" x="655.05" y="83" color="#2b4381" fontFamily="Arial" fontSize="18" tabStops="S0 S50 S100" text="LocName" id="richtext1" d:userLabel="LocName" height="17.05" width="125.95"/>
+	</fx:DesignLayer>
+	<fx:DesignLayer d:userLabel="Home">
+		<fx:DesignLayer d:userLabel="Grid">
+			<s:List includeIn="homeGrid,homeTile" width="821" height="540.95" id="list3" d:userLabel="SearchDataGrid" alpha="0.74" x="84" y="120" visible.homeTile="false">
+				<s:ArrayCollection>
+					<fx:String>Chysler</fx:String>
+					<fx:String>Ford</fx:String>
+					<fx:String>Mercedes</fx:String>
+					<fx:String>Dodge</fx:String>
+					<fx:String>Audi</fx:String>
+				</s:ArrayCollection>
+			</s:List>
+		</fx:DesignLayer>
+		<s:RichText includeIn="homeGrid,homeTile" x="81" y="73" width="206" height="32" color="#2b4381" fontFamily="Arial" fontSize="12" tabStops="S0 S50 S100 S150 S200 S250" text="25 locations found" id="richtext2" height.homeTile="27" x.homeTile="51" y.homeTile="63"/>
+		<s:ToggleButton includeIn="homeGrid,homeTile" label="TileView" id="togglebutton1" buttonMode="true" x="803" y="79" selected.homeTile="true" selected.homeGrid="false" click="toggleButton_clickHandler()" x.homeTile="793" y.homeTile="59"/>
+		<fx:DesignLayer d:userLabel="Tile">
+			<s:List width="821" height="491.95" id="list4" d:userLabel="SearchDataTile" alpha="0.74" x="44" y="90" includeIn="homeTile">
+				<s:ArrayCollection>
+					<fx:String>Apple</fx:String>
+					<fx:String>Orange</fx:String>
+					<fx:String>Banana</fx:String>
+					<fx:String>Blueberry</fx:String>
+					<fx:String>Pear</fx:String>
+				</s:ArrayCollection>
+			</s:List>
+		</fx:DesignLayer>
+	</fx:DesignLayer>
+	<s:transitions>
+		<s:Transition fromState="locDetail" toState="mainState" autoReverse="true">
+			<s:Parallel>
+				<s:Parallel target="{rect1}">
+					<s:Fade duration="0"/>
+				</s:Parallel>
+				<s:Parallel target="{list1}">
+					<s:Fade duration="0"/>
+				</s:Parallel>
+				<s:Parallel target="{list0}">
+					<s:Fade duration="0"/>
+				</s:Parallel>
+				<s:Parallel target="{list2}">
+					<s:Fade duration="0"/>
+				</s:Parallel>
+				<s:Parallel target="{button1}">
+					<s:Fade duration="0"/>
+				</s:Parallel>
+				<s:Parallel target="{richtext1}">
+					<s:Fade duration="0"/>
+				</s:Parallel>
+			</s:Parallel>
+		</s:Transition>
+	</s:transitions>
+</s:Application>

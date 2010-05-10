@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application 
+	xmlns:fx="http://ns.adobe.com/mxml/2009" 
+	xmlns:s="library://ns.adobe.com/flex/spark" 
+	xmlns:mx="library://ns.adobe.com/flex/mx" 
+	xmlns:d="http://ns.adobe.com/fxg/2008/dt" 
+	xmlns:fc="http://ns.adobe.com/flashcatalyst/2009"
+	width="975" height="705" 
+	backgroundColor="#ffffff"
+	xmlns:my="*" minWidth="600" minHeight="350" 
+	currentState="locDetail"
+	creationComplete="requestParks()">
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.controls.Text;
+			import mx.events.FlexEvent;
+			import mx.rpc.events.ResultEvent;
+			import mx.utils.UIDUtil;
+			
+			
+			
+			private static const YQL_PARK_SEARCH_SELECT:String= "select * from htmlpost where url='http://www.recreation.gov/recFacilitySearch.do'  and xpath='//*[@id=\"shoppingitems\"]/tbody/tr/td[@class]/a'  and postdata=";
+			private static const YQL_PARK_SEARCH_TABLE:String='http://rocketeer.heroku.com/hacks/htmlpost/htmlpost.xml';
+			private static const YQL_PARK_DETAILS_TABLE:String='http://rocketeer.heroku.com/hacks/htmlpost/htmlpost.xml';
+			private static const YQL_SELECT_LOC_DETAIL:String="select * from html where xpath='//*[@id=\"contentcol\"]' and url=";
+			// private static const YQL_TERM:String= "/"dogs/"";
+			
+			// Set value of  chosen item in list 
+			[Bindable]
+			public var _parkChoice:String= "";
+			
+			[Bindable]
+			public var _parkUrl:String= "";
+			
+			[Bindable]
+			public var _parkSelect:String= "";
+
+			public function ChooseLocation(data:Object):void
+			{
+				// Set the value richtext to the value of the selected recreation spot
+				_parkChoice = data.valueOf();
+				_parkUrl	= "http://www.recreation.gov" + data.href;
+				/* Alert.show('You have selected ' + _parkChoice); */
+				parkChoiceLabel.text = _parkChoice;
+				
+				// TODO scrape data from detail page, _parkUrl
+				_parkSelect = YQL_SELECT_LOC_DETAIL + "'" + _parkUrl + "'";
+				
+				// TODO  set variables with scraped data
+				
+				// TODO  get picks from area by using woeid and flickr with yql
+				
+				
+			}
+			//  This function is not used yet.  I went with the above and skipped bubbling events for now.
+			 public function ChooseLocationEvent(event:Event):void
+			{
+				// Set the value richtext to the value of the selected recreation spot
+				_parkChoice ="magic number";
+				Alert.show('You have selected ' + _parkChoice);
+				parkChoiceLabel.text += 'Button 2 clicked';
+				
+			} 
+
+			
+			[Bindable]
+			private var parkDetails:ArrayCollection;
+			
+			private function requestParkDetails():void {
+				var params:Object = new Object();
+				/* params.format = 'rss_200_enc'; */
+				params.q = YQL_SELECT_LOC_DETAIL + "'" + _parkUrl +"'";
+				yqlService.send(params);
+			}
+			
+
+			
+			[Bindable]
+			private var parkFeed:ArrayCollection;
+			
+			private function requestParks():void {
+				var params:Object = new Object();
+				var parkKeySearchTerm:String = searchTerms.text;
+				/* params.format = 'rss_200_enc'; */
+				 params.q = "use '" + YQL_PARK_SEARCH_TABLE + "' as htmlpost; " + YQL_PARK_SEARCH_SELECT + "'keyword=" + parkKeySearchTerm +"' "; 
+				 /* params.q = "use '" + YQL_PARK_SEARCH_TABLE + "' as htmlpost; " + YQL_PARK_SEARCH_SELECT + "'" + parkKeySearchTerm +"'"; */ 
+				yqlService.send(params);
+			}
+			
+			private function parkHandler(event:ResultEvent):void {
+				parkFeed = event.result.query.results.postresult.a as ArrayCollection;
+			}
+			
+			protected function closeDetail_clickHandler():void
+			{
+				currentState='homeGrid';
+			}
+			
+			protected function toggleButton_clickHandler():void
+			{
+				const state:String = currentState;
+				if ( state == 'homeTile' ) {
+					currentState='homeGrid';
+				}
+				if ( state == 'homeGrid' ) {
+					currentState='homeTile';
+				}
+			}
+			
+			
+		]]>
+	</fx:Script>
+	
+	
+	<s:states>
+		<s:State name="mainState"/>
+		<s:State name="homeGrid"/>
+		<s:State name="locDetail"/>
+		<s:State name="homeTile"/>
+	</s:states>
+	
+	<fx:Declarations>
+		<s:HTTPService id="yqlService"
+					   url="http://query.yahooapis.com/v1/public/yql"
+					   result="parkHandler(event)" />		
+	</fx:Declarations>
+	
+	
+	
+	<!-- start Design Layout
+	-->
+	
+	<fx:DesignLayer d:userLabel="MainLayout">
+		<s:DropDownList id="activitiesPulldown" x="654.65" y="14.2"></s:DropDownList>
+		<s:DropDownList id="stateOrTerritory"   x="366.65" y="14.2"></s:DropDownList>
+		<s:RichText color="#2b4381" fontFamily="Arial" fontSize="12" tabStops="S0 S50" text="Parks" textAlpha="1" d:userLabel="AppName" x="29" y="613"/>
+		
+		<s:TextInput id="searchTerms" x="28" y="14" d:userLabel="SearchInput"
+					 enter="requestParks()" text="bugs" />
+		<s:Button label="Search" x="175" y="16" skinClass="components.Button1" d:userLabel="SearchButton" buttonMode="true"
+				  click="requestParks()" />
+
+		<s:Line yTo="1" y="51.5" xTo="915" x="7.5" d:userLabel="TopLine">
+			<s:stroke>
+				<s:SolidColorStroke color="0x5380D0" caps="none" joints="miter" miterLimit="4" weight="1"/>
+			</s:stroke>
+		</s:Line>
+		<s:Line yTo="3" xTo="915" d:userLabel="BottomLine" x="9" y="604">
+			<s:stroke>
+				<s:SolidColorStroke color="0x5380D0" caps="none" joints="miter" miterLimit="4" weight="1"/>
+			</s:stroke>
+		</s:Line>
+		<s:BitmapImage source="@Embed('/assets/images/4263920843_5e5ef906fa_b.jpg')" alpha="0.48" width="687" height="524" y="53" x="14" x.homeTile="93" y.homeTile="71"/>
+		<s:CheckBox label="Find Nearby" x="268.5" y="19.2" selected="true" buttonMode="true"/>
+		<s:TextInput text="City or ZIP" d:userLabel="SearchInput" x="505" y="14"/>
+		
+		<!--start from http://www.insideria.com/2009/08/using-virtualized-layouts-and.html
+			and
+			http://www.leavethatthingalone.com/blog/index.cfm/2009/10/15/flex4ItemRenderers
+		-->
+		<s:Scroller width="55%" height="74%" includeIn="mainState, locDetail" x="10" y="55" width.locDetail="22%" id="searchList">
+			
+			<s:DataGroup dataProvider="{ parkFeed }" id="dataGroup" width="100%"  x="10" y="10">
+				
+				<s:itemRenderer>
+					<fx:Component>
+						<s:ItemRenderer width="100%" height="125" click="itemrenderer1_clickHandler(data)">
+
+							<fx:Script>
+								<![CDATA[
+									protected function itemrenderer1_clickHandler(data:Object):void
+									{
+										// TODO Auto-generated method stub
+										var _parkChoice:String= data.value;
+
+										outerDocument.ChooseLocation(data);
+
+									}
+								]]>
+							</fx:Script>
+
+
+							<s:states>
+								<s:State name="normal" />
+								<s:State name="hovered" />
+							</s:states>
+							
+							<s:Rect height="125" radiusX="10" width="100%" radiusY="10">
+								<s:fill>
+									<s:SolidColor color="#7fff7f" color.hovered="#FF6666"/>
+								</s:fill>
+								<s:stroke>
+									<s:SolidColorStroke color="0x4769C4" caps="none" joints="miter" miterLimit="4" weight="1"/>
+								</s:stroke>
+							</s:Rect>
+
+							<!--<mx:Image 
+								width="100" height="100"
+								source="{'http://static.flickr.com/' + data.server + '/' + data.id + '_' + data.secret + '_s.jpg'}" />-->
+
+							<s:RichText bottom="5" text="{data}" horizontalCenter="0" color="white" fontWeight="bold" />
+						</s:ItemRenderer>
+					</fx:Component>
+				</s:itemRenderer>
+				
+				<s:layout>
+					<s:VerticalLayout useVirtualLayout="true" >
+						<fx:Script>
+							<![CDATA[
+								protected function minusDB_clickHandler(event:MouseEvent):void
+								{
+									// TODO Auto-generated method stub
+								}
+							]]>
+						</fx:Script>
+					</s:VerticalLayout>
+					
+				</s:layout>
+				
+			</s:DataGroup>
+			
+		</s:Scroller>
+		
+		<!--finish from http://www.insideria.com/2009/08/using-virtualized-layouts-and.html-->		
+		
+		
+	</fx:DesignLayer>
+	<fx:DesignLayer d:userLabel="LocDetail" visible.homeTile="false" id="designlayer1" visible.homeGrid="false">
+		<s:Rect includeIn="locDetail" y="240.5" x="531.5" height="114" width="120" id="rect1" d:userLabel="LocationPic" alpha="0.74">
+			<s:stroke>
+				<s:SolidColorStroke color="0x5380D0" caps="none" joints="miter" miterLimit="4" weight="1"/>
+			</s:stroke>
+			<s:fill>
+				<s:SolidColor color="0xFFFFFF"/>
+			</s:fill>
+		</s:Rect>
+		<!--<s:RichText includeIn="locDetail" 
+					x="655.05" y="58" 
+					color="#2b4381" 
+					fontFamily="Arial" fontSize="18" 
+					tabStops="S0 S50 S100" 
+					text="LocName {_parkChoice}" 
+					id="parkChoiceLabel" 
+					d:userLabel="LocName" 
+					height="17.05" width="125.95"/>-->
+		<s:Label includeIn="locDetail" 
+							 x="655.05" y="58" 
+							 color="#2b4381" 
+							 fontFamily="Arial" fontSize="18" 
+							 text="" 
+							 id="parkChoiceLabel" 
+							 d:userLabel="LocName" />
+		<s:List width="127.05" height="499.95" x="297" y="103" id="list0" d:userLabel="PhotoList" includeIn="locDetail" textAlpha="0.74">
+			<s:ArrayCollection>
+				<fx:String>Apple</fx:String>
+				<fx:String>Orange</fx:String>
+				<fx:String>Banana</fx:String>
+				<fx:String>Blueberry</fx:String>
+				<fx:String>Pear</fx:String>
+			</s:ArrayCollection>
+		</s:List>
+		
+		<mx:Accordion  includeIn="locDetail" width="200" height="450" x="723" y="100" id="locationDetailsAccordion">
+			<s:NavigatorContent label="Quick Facts"
+								width="100" height="100">
+				<s:layout>
+					<s:VerticalLayout paddingTop="10" paddingLeft="5"/>
+				</s:layout>
+				<s:Label text="Text for Pane 1"/>
+				<s:Button label="Button 1"/>
+				<mx:LinkButton label="Learn More" 
+							   width="100"
+							   click="navigateToURL(new URLRequest(_parkUrl), 'Homepage')"/>
+
+			</s:NavigatorContent>
+			<s:NavigatorContent label="Activities"
+								width="100" height="100">
+				<s:layout>
+					<s:VerticalLayout paddingTop="10" paddingLeft="5"/>
+				</s:layout>
+				<s:Label text="Text for Pane 2, Activities"/>
+				<s:Button label="Button 2"/>
+			</s:NavigatorContent>
+			<s:NavigatorContent label="Contact"
+								width="100" height="100">
+				<s:layout>
+					<s:VerticalLayout paddingTop="10" paddingLeft="5"/>
+				</s:layout>
+				<s:Label text="Text for Pane 3"/>
+				<s:Button label="Button 3"/>
+			</s:NavigatorContent>
+			<s:NavigatorContent label="Directions"
+								width="100" height="100">
+				<s:layout>
+					<s:VerticalLayout paddingTop="10" paddingLeft="5"/>
+				</s:layout>
+				<s:Label text="Text for Pane 3"/>
+				<s:Button label="Button 3"/>
+			</s:NavigatorContent>
+			<s:NavigatorContent label="Map"
+								width="100" height="100">
+				<s:layout>
+					<s:VerticalLayout paddingTop="10" paddingLeft="5"/>
+				</s:layout>
+				<s:Label text="Text for Pane 3"/>
+				<s:Button label="Button 3"/>
+			</s:NavigatorContent>
+			<s:NavigatorContent label="Weather"
+								width="100" height="100">
+				<s:layout>
+					<s:VerticalLayout paddingTop="10" paddingLeft="5"/>
+				</s:layout>
+				<s:Label text="Text for Pane 3"/>
+				<s:Button label="Button 3"/>
+			</s:NavigatorContent>
+		</mx:Accordion>
+
+		<!--<mx:Accordion includeIn="locDetail" width="200" height="5" x="723" y="100" id="list2">
+			<s:NavigatorContent label="Place" width="100%" height="100%">
+			</s:NavigatorContent>
+			<mx:VBox label="Description">
+				<mx:TextInput/>
+				<mx:Button label="Button 1"/>
+			</mx:VBox>
+			<mx:VBox label="Activities">
+				<mx:TextInput/>
+				<mx:Button label="Button 2"/>
+			</mx:VBox>
+			<mx:VBox label="Contact">
+				<mx:TextInput/>
+				<mx:Button label="Button 2"/>
+			</mx:VBox>
+			<mx:VBox label="Directions">
+				<mx:TextInput/>
+				<mx:Button label="Button 2"/>
+			</mx:VBox>
+			<mx:VBox label="Map">
+				<mx:TextInput/>
+				<mx:Button label="Button 2"/>
+			</mx:VBox>
+			<mx:VBox label="Weather">
+				<mx:TextInput/>
+				<mx:Button label="Button 2"/>
+			</mx:VBox>
+		</mx:Accordion>-->
+		
+		<s:Button includeIn="locDetail" label="X" x="871" y="61.05" id="button1" d:userLabel="CloseDetail" width="49" buttonMode="true" click="closeDetail_clickHandler()"/>
+		
+	</fx:DesignLayer>
+	<fx:DesignLayer d:userLabel="Home">
+		<fx:DesignLayer d:userLabel="Grid">
+			<s:List includeIn="homeGrid,homeTile" width="821" height="540.95" id="list3" d:userLabel="SearchDataGrid" alpha="0.74" x="84" y="120" visible.homeTile="false">
+				<s:ArrayCollection>
+					<fx:String>Chysler</fx:String>
+					<fx:String>Ford</fx:String>
+					<fx:String>Mercedes</fx:String>
+					<fx:String>Dodge</fx:String>
+					<fx:String>Audi</fx:String>
+				</s:ArrayCollection>
+			</s:List>
+		</fx:DesignLayer>
+		<s:RichText includeIn="homeGrid,homeTile" x="81" y="73" width="206" height="32" color="#2b4381" fontFamily="Arial" fontSize="12" tabStops="S0 S50 S100 S150 S200 S250" text="25 locations found" id="richtext2" height.homeTile="27" x.homeTile="51" y.homeTile="63"/>
+		<s:ToggleButton includeIn="homeGrid,homeTile" label="TileView" id="togglebutton1" buttonMode="true" x="803" y="79" selected.homeTile="true" selected.homeGrid="false" click="toggleButton_clickHandler()" x.homeTile="793" y.homeTile="59"/>
+		<fx:DesignLayer d:userLabel="Tile">
+			<s:List width="821" height="491.95" id="list4" d:userLabel="SearchDataTile" alpha="0.74" x="44" y="90" includeIn="homeTile">
+				<s:ArrayCollection>
+					<fx:String>Apple</fx:String>
+					<fx:String>Orange</fx:String>
+					<fx:String>Banana</fx:String>
+					<fx:String>Blueberry</fx:String>
+					<fx:String>Pear</fx:String>
+				</s:ArrayCollection>
+			</s:List>
+		</fx:DesignLayer>
+	</fx:DesignLayer>
+	
+	<!--	end Design Layout
+	-->	
+	<!-- Transitions of States
+	-->
+	<s:transitions>
+		<s:Transition fromState="locDetail" toState="mainState" autoReverse="true">
+			<s:Parallel>
+				<s:Parallel target="{rect1}">
+					<s:Fade duration="0"/>
+				</s:Parallel>
+				<s:Parallel target="{searchList}">
+					<s:Fade duration="0"/>
+				</s:Parallel>
+				<s:Parallel target="{list0}">
+					<s:Fade duration="0"/>
+				</s:Parallel>
+				<s:Parallel target="{locationDetailsAccordion}">
+					<s:Fade duration="0"/>
+				</s:Parallel>
+				<s:Parallel target="{button1}">
+					<s:Fade duration="0"/>
+				</s:Parallel>
+				<s:Parallel target="{parkChoiceLabel}">
+					<s:Fade duration="0"/>
+				</s:Parallel>
+			</s:Parallel>
+		</s:Transition>
+	</s:transitions>
+	
+</s:Application>
