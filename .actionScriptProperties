@@ -26,6 +26,7 @@
     <application path="FlickrList.mxml"/>
     <application path="List2Detail.mxml"/>
     <application path="DataGroupExample.mxml"/>
+    <application path="SalesExample.mxml"/>
   </applications>
   <modules/>
   <buildCSSFiles/>

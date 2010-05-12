@@ -18,14 +18,22 @@
 			import mx.controls.Text;
 			import mx.events.FlexEvent;
 			import mx.rpc.events.ResultEvent;
+			import mx.utils.ArrayUtil;
 			import mx.utils.UIDUtil;
+			[Bindable]
+			public var navData:ArrayCollection;
+			
+			[Bindable]
+			public var index:int=-1;
+
+
 			
 			
 			
 			private static const YQL_PARK_SEARCH_SELECT:String= "select * from htmlpost where url='http://www.recreation.gov/recFacilitySearch.do'  and xpath='//*[@id=\"shoppingitems\"]/tbody/tr/td[@class]/a'  and postdata=";
 			private static const YQL_PARK_SEARCH_TABLE:String='http://rocketeer.heroku.com/hacks/htmlpost/htmlpost.xml';
 			private static const YQL_PARK_DETAILS_TABLE:String='http://rocketeer.heroku.com/hacks/htmlpost/htmlpost.xml';
-			private static const YQL_SELECT_LOC_DETAIL:String="select * from html where xpath='//*[@id=\"contentcol\"]' and url=";
+			private static const YQL_SELECT_LOC_DETAIL:String="select * from html where xpath='//*[@id=\"contentcol\"]/div/div' and url=";
 			// private static const YQL_TERM:String= "/"dogs/"";
 			
 			// Set value of  chosen item in list 
@@ -38,6 +46,12 @@
 			[Bindable]
 			public var _parkSelect:String= "";
 
+			[Bindable]
+			public var _parkDescription:String = "";
+
+			[Bindable]
+			private var parkDetailsFeed:XML;
+
 			public function ChooseLocation(data:Object):void
 			{
 				// Set the value richtext to the value of the selected recreation spot
@@ -47,11 +61,24 @@
 				parkChoiceLabel.text = _parkChoice;
 				
 				// TODO scrape data from detail page, _parkUrl
-				_parkSelect = YQL_SELECT_LOC_DETAIL + "'" + _parkUrl + "'";
-				
+				requestParkDetails();				
 				// TODO  set variables with scraped data
+				/* _parkDescription = parkDetailsFeed */
+
 				
 				// TODO  get picks from area by using woeid and flickr with yql
+				/* getXmlList(); */
+				/* _parkDescription = "";
+				_parkDescription = "park description here"; */
+
+				
+				/* var output:String = "";
+				output = "now intro";
+				outputTA.text = _parkDescription; */
+
+				// parkInfo.text = parkDetailsFeed;
+				 // getXmlList(); 
+				
 				
 				
 			}
@@ -66,15 +93,35 @@
 			} 
 
 			
-			[Bindable]
-			private var parkDetails:ArrayCollection;
+			/* start park details scrape			 */
+			
+			
 			
 			private function requestParkDetails():void {
 				var params:Object = new Object();
+				var yqlParkUrl:String = _parkUrl;
 				/* params.format = 'rss_200_enc'; */
-				params.q = YQL_SELECT_LOC_DETAIL + "'" + _parkUrl +"'";
-				yqlService.send(params);
+				params.q = YQL_SELECT_LOC_DETAIL + "'" + yqlParkUrl +"'";
+				///params.q = "select * from flickr.photos.search where text='Cat' limit 10";
+				parkDetailService.send(params); 
+				/* Alert.show('requested ParkDetails'); */
+
 			}
+			
+			private function parkDetailHandler(event:ResultEvent):void 
+			{
+				parkDetailsFeed = event.result.query as XML;
+				var x:XML = event.result as XML;    
+				var xl:XMLList = XMLList( x.results.div );
+				var xc:XMLListCollection = new XMLListCollection( xl );
+/* 				Alert.show('You have selected xl ' + xl);
+
+				_parkDescription = parkDetailsFeed;
+				Alert.show('You have selected _parkDescription' + _parkDescription);
+ */				outputTA.text= xl;
+			}
+			
+			/* finish park details scrape	 */		
 			
 
 			
@@ -85,9 +132,10 @@
 				var params:Object = new Object();
 				var parkKeySearchTerm:String = searchTerms.text;
 				/* params.format = 'rss_200_enc'; */
-				 params.q = "use '" + YQL_PARK_SEARCH_TABLE + "' as htmlpost; " + YQL_PARK_SEARCH_SELECT + "'keyword=" + parkKeySearchTerm +"' "; 
-				 /* params.q = "use '" + YQL_PARK_SEARCH_TABLE + "' as htmlpost; " + YQL_PARK_SEARCH_SELECT + "'" + parkKeySearchTerm +"'"; */ 
-				yqlService.send(params);
+				params.q = "use '" + YQL_PARK_SEARCH_TABLE + "' as htmlpost; " + YQL_PARK_SEARCH_SELECT + "'keyword=" + parkKeySearchTerm + "' "; 
+
+				parkListingService.send(params);
+
 			}
 			
 			private function parkHandler(event:ResultEvent):void {
@@ -110,7 +158,63 @@
 				}
 			}
 			
+			// xmllist from Hello Flex 4
+			import mx.collections.XMLListCollection;
+			import mx.collections.Sort;
+			import mx.collections.SortField;
 			
+			private var _projectsXML:XML =
+				<projects>
+				  <project id="1" name="Proj1">
+					<task id="1">
+					  <name>Understand E4X</name>
+					  <notes>cool, for XML anyway</notes>
+					</task>
+					<task id="2">
+					  <name>Learn XMLList</name>
+					  <notes>simple</notes>
+					</task>
+				  </project>
+				  <project id="2" name="Proj2">
+					<task id="3">
+					  <name>Learn XMLListCollection</name>
+					</task>
+					<task id="4">
+					  <name>Get a coffee</name>
+					  <notes>very necessary</notes>
+					</task>
+				  </project>
+				</projects>;
+			
+			private function getXmlList():void {
+				var output:String = "";
+				output += "Full XML:\n" + _projectsXML;
+				output += "\n\nUsing E4X and XMLList:\n";
+				output += _projectsXML.project[0].task[0].name + "\n";
+				output += _projectsXML.project.(@name=="Proj2").task.(@id==3).name;
+				var projects:XMLList = _projectsXML.children();
+				for each (var project:XML in projects) {
+					output += "Project: " + project.@name + "\n";
+					for each (var task:XML in project.task) {
+						output += "  Task " + task.@id + ": " + task.name;
+						if (task.hasOwnProperty('notes')) {
+							output += " (" + task.notes + ")";
+						}
+						output += "\n";
+					}
+				}
+				output += "\nLearning XMLListCollection and Sorting:\n"
+				var allTasks:XMLListCollection = new XMLListCollection(
+					_projectsXML.descendants("task"));
+				var sort:Sort = new Sort();
+				sort.fields = [new SortField("name",true)];
+				allTasks.sort = sort;
+				allTasks.refresh();
+				for each (var sortedTask:XML in allTasks) {
+					output += sortedTask.name + "\n";
+				}
+				outputTA.text = output;
+			}
 		]]>
 	</fx:Script>
 	
@@ -123,9 +227,14 @@
 	</s:states>
 	
 	<fx:Declarations>
-		<s:HTTPService id="yqlService"
+		<s:HTTPService id="parkListingService"
 					   url="http://query.yahooapis.com/v1/public/yql"
 					   result="parkHandler(event)" />		
+		<s:HTTPService id="parkDetailService"
+					   url="http://query.yahooapis.com/v1/public/yql"
+					   result="parkDetailHandler(event)"
+					   resultFormat="e4x"/>	
+
 	</fx:Declarations>
 	
 	
@@ -263,68 +372,17 @@
 			</s:ArrayCollection>
 		</s:List>
 		
-		<mx:Accordion  includeIn="locDetail" width="200" height="450" x="723" y="100" id="locationDetailsAccordion">
-			<s:NavigatorContent label="Quick Facts"
-								width="100" height="100">
-				<s:layout>
-					<s:VerticalLayout paddingTop="10" paddingLeft="5"/>
-				</s:layout>
-				<s:Label text="Text for Pane 1"/>
-				<s:Button label="Button 1"/>
-				<mx:LinkButton label="Learn More" 
-							   width="100"
-							   click="navigateToURL(new URLRequest(_parkUrl), 'Homepage')"/>
+		<mx:Accordion  includeIn="locDetail" 
+					   width="200" height="450" 
+					   x="723" y="100" 
+					   id="locationDetailsAccordion">
 
-			</s:NavigatorContent>
-			<s:NavigatorContent label="Activities"
-								width="100" height="100">
-				<s:layout>
-					<s:VerticalLayout paddingTop="10" paddingLeft="5"/>
-				</s:layout>
-				<s:Label text="Text for Pane 2, Activities"/>
-				<s:Button label="Button 2"/>
-			</s:NavigatorContent>
-			<s:NavigatorContent label="Contact"
-								width="100" height="100">
-				<s:layout>
-					<s:VerticalLayout paddingTop="10" paddingLeft="5"/>
-				</s:layout>
-				<s:Label text="Text for Pane 3"/>
-				<s:Button label="Button 3"/>
-			</s:NavigatorContent>
-			<s:NavigatorContent label="Directions"
-								width="100" height="100">
-				<s:layout>
-					<s:VerticalLayout paddingTop="10" paddingLeft="5"/>
-				</s:layout>
-				<s:Label text="Text for Pane 3"/>
-				<s:Button label="Button 3"/>
-			</s:NavigatorContent>
-			<s:NavigatorContent label="Map"
-								width="100" height="100">
-				<s:layout>
-					<s:VerticalLayout paddingTop="10" paddingLeft="5"/>
-				</s:layout>
-				<s:Label text="Text for Pane 3"/>
-				<s:Button label="Button 3"/>
-			</s:NavigatorContent>
-			<s:NavigatorContent label="Weather"
-								width="100" height="100">
-				<s:layout>
-					<s:VerticalLayout paddingTop="10" paddingLeft="5"/>
-				</s:layout>
-				<s:Label text="Text for Pane 3"/>
-				<s:Button label="Button 3"/>
-			</s:NavigatorContent>
-		</mx:Accordion>
-
-		<!--<mx:Accordion includeIn="locDetail" width="200" height="5" x="723" y="100" id="list2">
 			<s:NavigatorContent label="Place" width="100%" height="100%">
+				<s:TextArea id="outputTA" width="100%" height="100%"/>
 			</s:NavigatorContent>
-			<mx:VBox label="Description">
-				<mx:TextInput/>
-				<mx:Button label="Button 1"/>
-			</mx:VBox>
+			<s:NavigatorContent label="Description"  width="100%" height="100%">
+				<s:TextArea id="parkInfo" width="100%" height="100%" text=""/>
+			</s:NavigatorContent>
 			<mx:VBox label="Activities">
 				<mx:TextInput/>
 				<mx:Button label="Button 2"/>
@@ -345,7 +403,7 @@
 				<mx:TextInput/>
 				<mx:Button label="Button 2"/>
 			</mx:VBox>
-		</mx:Accordion>-->
+		</mx:Accordion>
 		
 		<s:Button includeIn="locDetail" label="X" x="871" y="61.05" id="button1" d:userLabel="CloseDetail" width="49" buttonMode="true" click="closeDetail_clickHandler()"/>
 		

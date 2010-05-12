@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" 
+			   minWidth="955" minHeight="600"
+			   creationComplete="salesRequest.send();">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<s:HTTPService  id="salesRequest" useProxy="false"
+						resultFormat="e4x"
+						result="salesResultHandler(event)"
+						url="http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20flickr.photos.search%20where%20text%3D%22Cat%22%20limit%2010" />
+		
+	</fx:Declarations>
+	
+		<fx:Script>
+			<![CDATA[
+				import mx.collections.XMLListCollection;
+				import mx.controls.Alert;
+				import mx.controls.Text;
+				import mx.rpc.events.ResultEvent;
+			
+				[Bindable] 
+				public var salesDPList:XMLList;
+			
+				private function salesResultHandler(event:ResultEvent):void{
+					salesDPList = new XMLList(event.result.Region);
+					var salesText:XML;
+					salesText = new XML(event.result.query.results);
+					outputTA.text = salesDPList;
+					Alert.show('You have selected ' + salesText);
+					
+				}
+			]]>
+		</fx:Script>
+
+	
+		<!--<mx:AdvancedDataGrid width="100%" height="100%">
+			<mx:dataProvider>
+				<mx:HierarchicalData source="{salesDPList}"/>
+			</mx:dataProvider>
+			<mx:columns>
+				<mx:AdvancedDataGridColumn dataField="@Region"
+										   headerText="Region"/>
+				<mx:AdvancedDataGridColumn dataField="@Territory_Rep"
+										   headerText="Territory Rep"/>
+				<mx:AdvancedDataGridColumn dataField="@Actual"
+										   headerText="Actual"/>
+				<mx:AdvancedDataGridColumn dataField="@Estimate"
+										   headerText="Estimate"/>
+			</mx:columns>
+		</mx:AdvancedDataGrid>-->  
+<!--	<mx:DataGrid width="100%" height="150" dataProvider="{salesDPList}"> 
+
+		<mx:columns> 
+			<mx:DataGridColumn dataField="@Region"
+							   headerText="Region"/> 
+			<mx:DataGridColumn dataField="@Territory_Rep"
+							   headerText="Territory Rep"/>      
+			<mx:DataGridColumn dataField="@Actual"
+							   headerText="Actual"/> 
+		</mx:columns> 
+	</mx:DataGrid>-->
+	
+	<s:TextArea height="222" id="outputTA" />
+	<s:List dataProvider="{salesDPList}"  
+			 alternatingItemColors="[#EEEEEE, #FFFFFF]" 
+			 width="250" height="150"/>
+ 
+
+</s:Application>

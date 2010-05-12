@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:AccordionHeader
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	mouseOver="fakeMouseClick(event)">
+	
+	<mx:Script>
+		<![CDATA[
+			/**
+			 * This gets called for every MOUSE_OVER event. All we do is dispatch a CLICK event
+			 * and we can trick the Accordion into thinking the header was clicked.
+			 */
+			private function fakeMouseClick(event:MouseEvent):void {
+				var clickEvent:MouseEvent = new MouseEvent(MouseEvent.CLICK, true, false, event.localX, event.localY);
+				dispatchEvent(clickEvent);
+			}
+		]]>
+	</mx:Script>
+	
+	<mx:Style>
+		.mainBox {
+			padding-top: 7;
+			padding-left: 5;
+			padding-right:10;
+			vertical-gap:0;	
+		}
+		
+		.title {
+			font-weight: bold;
+			font-size: 13;	
+		}
+		
+		.description {
+			font-weight: normal;
+			font-size: 12;	
+		}
+	</mx:Style>
+	
+	
+	<mx:VBox styleName="mainBox" width="100%" height="100%" color="#FFFFFF">
+		
+		<mx:Label text="{data.title}" styleName="title"
+			width="100%" />
+		
+		<mx:Text text="{data.description}" styleName="description"
+			width="100%" height="100%" 
+			selectable="false" />
+			
+	</mx:VBox>
+	
+
+	
+</mx:AccordionHeader>
