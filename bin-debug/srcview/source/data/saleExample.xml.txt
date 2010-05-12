@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Region Region="Southwest">
+  <Region Region="Arizona">
+    <Territory_Rep Territory_Rep="Barbara Jennings"
+      Actual="38865" Estimate="40000"/>
+    <Territory_Rep Territory_Rep="Dana Binn"
+      Actual="29885" Estimate="30000"/>
+  </Region>
+  <Region Region="Central California">
+    <Territory_Rep Territory_Rep="Joe Smith"
+      Actual="29134" Estimate="30000"/>
+  </Region>
+  <Region Region="Nevada">
+    <Territory_Rep Territory_Rep="Bethany Pittman"
+      Actual="52888" Estimate="45000"/>
+  </Region>
+  <Region Region="Northern California">
+    <Territory_Rep Territory_Rep="Lauren Ipsum"
+      Actual="38805" Estimate="40000"/>
+    <Territory_Rep Territory_Rep="T.R. Smith"
+      Actual="55498" Estimate="40000"/>
+  </Region>
+  <Region Region="Southern California">
+    <Territory_Rep Territory_Rep="Alice Treu"
+      Actual="44985" Estimate="45000"/>
+    <Territory_Rep Territory_Rep="Jane Grove"
+      Actual="44913" Estimate="45000"/>
+  </Region>
+</Region>

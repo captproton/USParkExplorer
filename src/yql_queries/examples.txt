@@ -1,0 +1,7 @@
+
+* Find 5 flickr.com photos from the area when you know the lat and lng.
+select * from flickr.photos.search(1,5) where woe_id in (select place.woeid from flickr.places where lat="36.23972" and lon="-121.47861")
+* Find 5 flickr.com creative commons (attribution) licensed photos from the area when you know the lat and lng.
+select * from flickr.photos.search(1,5) where woe_id in (select place.woeid from flickr.places where lat="36.23972" and lon="-121.47861") and license="4"
+* Get the weather forcast knowing the lat and lng
+select * from weather.forecast where location in (select postal from geo.places where woeid in (select place.woeid from flickr.places where lat="36.23972" and lon="-121.47861"))
