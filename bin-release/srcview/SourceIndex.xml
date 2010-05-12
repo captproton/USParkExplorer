@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<index>
+	<title>Source of parksApp</title>
+	<nodes>
+		<node label="html-template">
+			<node label="history">
+				<node label="history.css" icon="cssIcon" url="source/html-template/history/history.css.html"/>
+				<node label="history.js" url="source/html-template/history/history.js.txt"/>
+				<node label="historyFrame.html" icon="htmlIcon" url="source/html-template/history/historyFrame.html"/>
+			</node>
+			<node label="index.template.html" icon="htmlIcon" url="source/html-template/index.template.html"/>
+			<node label="playerProductInstall.swf" icon="swfIcon" url="source/html-template/playerProductInstall.swf"/>
+			<node label="swfobject.js" url="source/html-template/swfobject.js.txt"/>
+		</node>
+		<node label="libs">
+			<node label="FlashCatalyst.swc" url="source/libs/FlashCatalyst.swc"/>
+		</node>
+		<node label="src">
+			<node label="assets">
+				<node label="images">
+					<node label="4263920843_5e5ef906fa_b.jpg" icon="imageIcon" url="source/assets/images/4263920843_5e5ef906fa_b.jpg.html"/>
+				</node>
+			</node>
+			<node label="components" icon="packageIcon" expanded="true">
+				<node label="Button1.mxml" icon="mxmlIcon" url="source/components/Button1.mxml.html"/>
+			</node>
+			<node label="data">
+				<node label="saleExample.xml" url="source/data/saleExample.xml.txt"/>
+				<node label="yql.xml" url="source/data/yql.xml.txt"/>
+			</node>
+			<node label="DataGroupExample.mxml" icon="mxmlIcon" url="source/DataGroupExample.mxml.html"/>
+			<node label="FlickrList.mxml" icon="mxmlIcon" url="source/FlickrList.mxml.html"/>
+			<node label="Header.mxml" icon="mxmlIcon" url="source/Header.mxml.html"/>
+			<node selected="true" label="List2Detail.mxml" icon="mxmlAppIcon" url="source/List2Detail.mxml.html"/>
+			<node label="Main.mxml" icon="mxmlIcon" url="source/Main.mxml.html"/>
+			<node label="Main002.mxml" icon="mxmlIcon" url="source/Main002.mxml.html"/>
+			<node label="MainOld.mxml" icon="mxmlIcon" url="source/MainOld.mxml.html"/>
+			<node label="PrivateData.mxml" icon="mxmlIcon" url="source/PrivateData.mxml.html"/>
+			<node label="SalesExample.mxml" icon="mxmlIcon" url="source/SalesExample.mxml.html"/>
+		</node>
+	</nodes>
+	<zipfile label="Download source (ZIP, 729K)" url="parksApp.zip">
+	</zipfile>
+	<sdklink label="Download Flex SDK" url="http://www.adobe.com/go/flex4_sdk_download">
+	</sdklink>
+</index>

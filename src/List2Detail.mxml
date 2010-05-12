@@ -9,7 +9,7 @@
 	backgroundColor="#ffffff"
 	xmlns:my="*" minWidth="600" minHeight="350" 
 	currentState="locDetail"
-	creationComplete="requestParks()">
+	creationComplete="requestParks()" viewSourceURL="srcview/index.html">
 	
 	<fx:Script>
 		<![CDATA[
@@ -112,13 +112,15 @@
 			{
 				parkDetailsFeed = event.result.query as XML;
 				var x:XML = event.result as XML;    
-				var xl:XMLList = XMLList( x.results.div );
+				var xl:XMLList = XMLList( x.results.div.p );
 				var xc:XMLListCollection = new XMLListCollection( xl );
+				
+				var description:String = "Description\n";
 /* 				Alert.show('You have selected xl ' + xl);
 
 				_parkDescription = parkDetailsFeed;
 				Alert.show('You have selected _parkDescription' + _parkDescription);
- */				outputTA.text= xl;
+ */				outputTA.text= description + xl;
 			}
 			
 			/* finish park details scrape	 */		

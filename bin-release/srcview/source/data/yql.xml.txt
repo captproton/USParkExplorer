@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<query xmlns:yahoo="http://www.yahooapis.com/v1/base.rng" yahoo:count="1" yahoo:created="2010-05-08T03:49:34Z" yahoo:lang="en-US"><diagnostics><publiclyCallable>true</publiclyCallable><url execution-time="171" proxy="DEFAULT"><![CDATA[http://isithackday.com/hacks/htmlpost/htmlpost.xml]]></url><url execution-time="150" proxy="DEFAULT"><![CDATA[http://www.recreation.gov/recFacilitySearch.do]]></url><javascript execution-time="163" instructions-used="10433" table-name="htmlpost"/><user-time>339</user-time><service-time>321</service-time><build-version>6319</build-version></diagnostics><results><postresult><a href="/recAreaDetails.do?contractCode=NRSO&amp;recAreaId=2553&amp;agencyCode=128">Abraham
+Lincoln Birthplace National Historic Site</a><a href="/recAreaDetails.do?contractCode=NRSO&amp;recAreaId=2553&amp;agencyCode=128">Abraham
+Lincoln Birthplace National Historic Site</a><a href="/recAreaDetails.do?contractCode=NRSO&amp;facilityId=375329&amp;agencyCode=131">Aspen
+Grove Group Use Area (MT)</a><a href="/recAreaDetails.do?contractCode=NRSO&amp;facilityId=202580&amp;agencyCode=128">Battleground
+National Cemetery</a><a href="/recAreaDetails.do?contractCode=NRSO&amp;recAreaId=1303&amp;agencyCode=127">Big
+Stone Wetland Management District</a><a href="/recAreaDetails.do?contractCode=NRSO&amp;recAreaId=1947&amp;agencyCode=133">Billy
+The Kid Scenic Byway</a><a href="/recAreaDetails.do?contractCode=NRSO&amp;recAreaId=296&amp;agencyCode=130">Bluestem
+Lake</a><a href="/recAreaDetails.do?contractCode=NRSO&amp;facilityId=375337&amp;agencyCode=131">Cedar
+Creek (Sam Tobias) (NM)</a><a href="/recAreaDetails.do?contractCode=NRSO&amp;facilityId=375330&amp;agencyCode=131">Cummings
+Cabin (MT)</a><a href="/recAreaDetails.do?contractCode=NRSO&amp;recAreaId=1804&amp;agencyCode=126">Fort
+Stanton</a><a href="/recAreaDetails.do?contractCode=NRSO&amp;facilityId=202721&amp;agencyCode=128">Gettysburg
+National Cemetery</a><a href="/recAreaDetails.do?contractCode=NRSO&amp;recAreaId=303&amp;agencyCode=130">Holmes
+Lake</a><a href="/recAreaDetails.do?contractCode=NRSO&amp;facilityId=373565&amp;agencyCode=131">Horseshoe
+Campground (CO)</a><a href="/recAreaDetails.do?contractCode=NRSO&amp;recAreaId=1445&amp;agencyCode=127">John
+Hay National Wildlife Refuge</a><a href="/recAreaDetails.do?contractCode=NRSO&amp;facilityId=375480&amp;agencyCode=131">Lake
+Wedington (AR)</a><a href="/recAreaDetails.do?contractCode=NRSO&amp;facilityId=202806&amp;agencyCode=128">Lincoln
+Boyhood National Memorial</a><a href="/recAreaDetails.do?contractCode=NRSO&amp;facilityId=202807&amp;agencyCode=128">Lincoln
+Home National Historic Site</a><a href="/recAreaDetails.do?contractCode=NRSO&amp;facilityId=202808&amp;agencyCode=128">Lincoln
+Memorial</a><a href="/recAreaDetails.do?contractCode=NRSO&amp;recAreaId=1100&amp;agencyCode=131">Lincoln
+National Forest</a><a href="/recAreaDetails.do?contractCode=NRSO&amp;recAreaId=4075&amp;agencyCode=138">Lincoln
+Park Coast Cultural District</a><a href="/recAreaDetails.do?contractCode=NRSO&amp;recAreaId=2868&amp;agencyCode=128">National
+Capital Parks-Central</a><a href="/recAreaDetails.do?contractCode=NRSO&amp;recAreaId=1555&amp;agencyCode=127">Pahranagat
+National Wildlife Refuge</a><a href="/recAreaDetails.do?contractCode=NRSO&amp;recAreaId=302&amp;agencyCode=130">Pawnee
+Lake</a><a href="/recAreaDetails.do?contractCode=NRSO&amp;facilityId=370023&amp;agencyCode=131">Ryan
+Park (WY)</a><a href="/recAreaDetails.do?contractCode=NRSO&amp;facilityId=375285&amp;agencyCode=131">Savenac
+Cookhouse (MT)</a></postresult></results></query>
+<!-- total: 340 -->
+<!-- yqlengine2.pipes.re4.yahoo.com uncompressed/chunked Sat May  8 08:49:33 PDT 2010 -->
