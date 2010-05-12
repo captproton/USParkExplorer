@@ -11,6 +11,7 @@
 	currentState="locDetail"
 	creationComplete="requestParks()" viewSourceURL="srcview/index.html">
 	
+	
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
