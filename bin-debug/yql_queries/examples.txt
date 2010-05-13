@@ -5,3 +5,15 @@ select * from flickr.photos.search(1,5) where woe_id in (select place.woeid from
 select * from flickr.photos.search(1,5) where woe_id in (select place.woeid from flickr.places where lat="36.23972" and lon="-121.47861") and license="4"
 * Get the weather forcast knowing the lat and lng
 select * from weather.forecast where location in (select postal from geo.places where woeid in (select place.woeid from flickr.places where lat="36.23972" and lon="-121.47861"))
+* Get woeid with geo.places and text
+select woeid from geo.places where text="<h4>Address:</h4>R 1 Box 243E<br>Fall River,KS,67047<br>Phone: (620) 658-4445<br> "
+
+* Get weather forecast with address on Rec Page when you don't know the lat,lng
+select * from weather.forecast where location in (select postal from geo.places where woeid in (select woeid from geo.places where text="<h4>Address:</h4>R 1 Box 243E<br>Fall River,KS,67047<br>Phone: (620) 658-4445<br> "))
+
+
+* Get 5 creative commons (attribution) licensed photos with address on Rec Page when you don't know the lat,lng
+select * from flickr.photos.search(1,5) where woe_id in (select woeid from geo.places where text="<h4>Address:</h4>R 1 Box 243E<br>Fall River,KS,67047<br>Phone: (620) 658-4445<br> ")
+
+* Get 5 creative commons (attribution) licensed photos from the surrounding area with address on Rec Page without  lat,lng
+select * from flickr.photos.search(1,5) where woe_id in (select woeid from geo.places.ancestors(1,2) where descendant_woeid in (select woeid from geo.places where text="<h4>Address:</h4>R 1 Box 243E<br>Fall River,KS,67047<br>Phone: (620) 658-4445<br> " limit 1)) and license="4"
