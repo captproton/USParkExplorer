@@ -21,6 +21,8 @@
 			import mx.rpc.events.ResultEvent;
 			import mx.utils.ArrayUtil;
 			import mx.utils.UIDUtil;
+			
+			import spark.components.RichEditableText;
 			[Bindable]
 			public var navData:ArrayCollection;
 			
@@ -49,7 +51,10 @@
 
 			[Bindable]
 			public var _parkDescription:String = "";
-
+			
+			[Bindable]
+			public var _parkLocation:String = "";
+			
 			[Bindable]
 			private var parkDetailsFeed:XML;
 
@@ -112,16 +117,53 @@
 			private function parkDetailHandler(event:ResultEvent):void 
 			{
 				parkDetailsFeed = event.result.query as XML;
-				var x:XML = event.result as XML;    
-				var xl:XMLList = XMLList( x.results.div.p );
-				var xc:XMLListCollection = new XMLListCollection( xl );
+				var query:XML = event.result as XML;    
+				var details:XMLList = XMLList( query.results.div );
+				var detailsCollection:XMLListCollection = new XMLListCollection( details );
 				
-				var description:String = "Description\n";
+				var description:String = "Description" +"\n";
+				
+				var recInfo:String = "";
+				
+				recInfo += "Description" +"\n";
+//				recInfo += details.div[1].children();
+				for each (var detail:XML in details) {
+					recInfo += "Detail: " +  "\n";
+					// Get park address
+					if (detail.hasOwnProperty('h4')) { 
+						var tmp:String = detail.h4;
+						if (detail.h4 == 'Address:') {
+							_parkLocation = detail;
+							Alert.show('Your address is ' + _parkLocation);
+						}else{
+							Alert.show('loop ' + detail.h4);
+						}
+						
+						/* recInfo += " (" + detail.h4 + ")"; 
+						recInfo += "\n";
+						if (detail.hasOwnProperty('detail.p')) {
+							recInfo += detail.p;
+						} */
+					}else{
+						// no h4 means that it's the description paragraphs
+						var paragraphs:XMLList = detail.children();
+						for each (var paragraph:XML in paragraphs) {
+							recInfo += paragraph +"\n\n";
+						}
+						recInfo += detail;
+					}
+					recInfo += "\n";
+
+					
+
+				}
 /* 				Alert.show('You have selected xl ' + xl);
 
 				_parkDescription = parkDetailsFeed;
-				Alert.show('You have selected _parkDescription' + _parkDescription);
- */				outputTA.text= description + xl;
+				Alert.show('You have selected _parkDescription' + _parkDescription);*/
+				description += details;
+				recInfo += "fun" + "\n" + recInfo;
+				outputTA.text= recInfo;
 			}
 			
 			/* finish park details scrape	 */		
@@ -251,7 +293,7 @@
 		<s:RichText color="#2b4381" fontFamily="Arial" fontSize="12" tabStops="S0 S50" text="Parks" textAlpha="1" d:userLabel="AppName" x="29" y="613"/>
 		
 		<s:TextInput id="searchTerms" x="28" y="14" d:userLabel="SearchInput"
-					 enter="requestParks()" text="bugs" />
+					 enter="requestParks()" text="dog" />
 		<s:Button label="Search" x="175" y="16" skinClass="components.Button1" d:userLabel="SearchButton" buttonMode="true"
 				  click="requestParks()" />
 
@@ -381,7 +423,7 @@
 					   id="locationDetailsAccordion">
 
 			<s:NavigatorContent label="Place" width="100%" height="100%">
-				<s:TextArea id="outputTA" width="100%" height="100%"/>
+				<s:RichText id="outputTA" width="100%" height="100%"/>
 			</s:NavigatorContent>
 			<s:NavigatorContent label="Description"  width="100%" height="100%">
 				<s:TextArea id="parkInfo" width="100%" height="100%" text=""/>
